@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tekerli Biped Robotlar - Sağlık Uygulamaları</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* CORE DESIGN SYSTEM (Academic Deep Dive Theme) */
+        :root {
+            --bg-dark: #0d1a29; /* Dark Navy Blue */
+            --bg-panel: #1e293b; /* Dark Slate Blue */
+            --accent-main: #34d399; /* Emerald Green Accent */
+            --accent-alt: #10b981; /* Darker Emerald */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(52, 211, 153, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-dark);
+            display: grid;
+            gap: 30px;
+            grid-template-columns: 1fr;
+            min-height: 100vh;
+            padding: 40px 0;
+            place-items: center;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+        }
+
+       .slide-container {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            width: 1280px;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+        }
+
+       .slide-container::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 50%; height: 100%;
+            background: radial-gradient(circle at 100% 0%, rgba(52, 211, 153, 0.08), transparent 50%);
+            z-index: 0;
+        }
+
+        /* SPEAKER NOTES MODULE (NEW) */
+        .speaker-notes {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--accent-main);
+            border-radius: 50%; /* Circle initially */
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: help;
+        }
+
+        .speaker-notes:hover {
+            width: 400px;
+            height: auto;
+            min-height: 200px;
+            max-height: 600px;
+            border-radius: 12px;
+            background: #0f172a;
+            border-color: var(--accent-main);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            right: 20px;
+            top: 20px;
+        }
+
+        .note-icon {
+            position: absolute;
+            top: 13px;
+            right: 14px;
+            font-size: 22px;
+            color: var(--accent-main);
+            pointer-events: none;
+        }
+
+        .note-content {
+            opacity: 0;
+            padding: 20px;
+            padding-top: 60px; /* Space for icon */
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            transition: opacity 0.3s ease 0.1s;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .note-content strong {
+            color: var(--accent-main);
+        }
+
+        .speaker-notes:hover .note-content {
+            opacity: 1;
+        }
+
+        /* TYPOGRAPHY */
+        h1, h2, h3 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+       .slide-title {
+            font-size: 40px;
+            color: var(--accent-main);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        h3 { font-size: 26px; color: var(--text-primary); margin-bottom: 15px; font-weight: 600; }
+        
+        p, li {
+            font-size: 18px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+       .highlight { color: var(--accent-main); font-weight: 700; }
+
+        /* LAYOUTS & COMPONENTS */
+       .content-area { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; width: 100%; z-index: 1; }
+
+       .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            height: 100%;
+        }
+
+       .three-column {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            height: 100%;
+        }
+
+       .data-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 5px solid var(--accent-main);
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+       .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            text-align: center;
+        }
+       .stat-item h1 {
+            font-size: 70px;
+            color: var(--accent-main);
+            line-height: 1;
+        }
+       .stat-item p { color: var(--text-primary); font-size: 18px; margin-top: 5px; }
+
+       .list-icon { list-style: none; padding: 0; }
+       .list-icon li { padding-left: 30px; position: relative; margin-bottom: 18px; color: var(--text-primary); }
+       .list-icon li::before {
+            content: '\f058'; /* Check circle icon */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--accent-main);
+            position: absolute;
+            left: 0;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1 -->
+<div class="slide-container" style="justify-content: center; align-items: flex-start; background: radial-gradient(circle at 100% 0%, rgba(52, 211, 153, 0.15), transparent 60%), var(--bg-panel);">
+    <h1 style="font-size: 85px; margin-bottom: 10px; line-height: 1.1;">TEKERLİ BİPED <span style="color: var(--accent-main);">ROBOTLAR</span></h1>
+    <h2 style="font-weight: 300; color: var(--text-secondary); font-size: 32px;">İnsan Sağlığındaki Uygulamaları: Kapsamlı Bir İnceleme</h2>
+    <div style="margin-top: 60px; border-top: 1px solid var(--border-color); padding-top: 20px; width: 100%;">
+        <p style="font-size: 20px; color: var(--text-secondary);">Doktora Semineri |</p>
+        <p style="font-size: 14px; color: var(--text-secondary); margin-top: 5px;">Anahtar Kelimeler: Hibrit Hareket Sistemleri, Rehabilitasyon, Yaşlı Bakımı, Tıbbi Robotik</p>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Giriş Konuşması:</strong><br><br>
+            Sayın jüri üyeleri, değerli katılımcılar.<br>
+            Bugün sizlere, robotik teknolojilerin en heyecan verici kesişim noktalarından biri olan "Tekerli Biped Robotların İnsan Sağlığındaki Uygulamaları"nı sunacağım.<br>
+            Bu çalışma, hibrit hareket sistemlerinin sadece endüstriyel değil, doğrudan insan yaşam kalitesini artıran medikal bir devrim olduğunu ortaya koymaktadır.<br>
+            (Sağ üstteki ikona gelerek notlarınızı görebilirsiniz.)
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-layer-group"></i> 1. Giriş: Hibrit Lokomosyon Paradigması</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3>Neden Hibrit? Verimlilik ve Çok Yönlülük</h3>
+            <p>Tekerli biped robotlar, geleneksel humanoid robotların iki ayaklı yürüme kabiliyetini, tekerlekli platformların <span class="highlight">hız ve enerji verimliliği</span> ile birleştiren sistemlerdir.[1]</p>
+            <p>Bu tasarım, robotların farklı zemin koşullarına adapte olmasını, düz yüzeylerde hızlı hareket etmesini ve gerektiğinde merdiven veya engelli arazilerde yürüyebilmesini sağlamaktadır.[1]</p>
+            <p style="margin-top: 30px;">Küresel İhtiyaçlar: Yaşlanan nüfus, sağlık personeli açığı ve artan rehabilitasyon talebi bu teknolojilerin geliştirilmesini zorunlu kılmaktadır.[1]</p>
+        </div>
+        <div class="data-box" style="padding: 40px; text-align: center;">
+            <i class="fa-solid fa-bolt" style="font-size: 60px; color: var(--accent-main); margin-bottom: 20px;"></i>
+            <h1 style="font-size: 80px; color: var(--accent-main);">%85</h1>
+            <p style="font-size: 24px; color: var(--text-primary); margin-top: 10px;">Daha Az Enerji Tüketimi</p>
+            <p style="font-size: 16px;">Tekerli hareket, yürümeye göre bu oranda enerji tasarrufu sağlar. Uzun süreli operasyon için kritiktir.[1]</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Robotik dünyasında temel bir ikilem vardır: Bacaklar engebeli araziyi sever ama yavaştır; tekerlekler hızlıdır ama düz zemin ister.<br>
+            Hibrit sistemler bu iki dünyayı birleştirir. En çarpıcı veri şudur: Tekerlekli mod, yürümeye göre <strong>%85 enerji tasarrufu</strong> sağlar. Bu, robotun şarj olmadan tüm vardiya çalışabilmesi demektir.<br>
+            Yaşlanan nüfus ve personel açığı düşünüldüğünde, bu verimlilik bir lüks değil, zorunluluktur.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-chess-board"></i> 2.1. Temel Tasarım Prensipleri</h2>
+    <div class="content-area three-column">
+        <div class="data-box" style="border-left-color: #f97316;">
+            <i class="fa-solid fa-arrows-split-up-and-down" style="font-size: 30px; color: #f97316;"></i>
+            <h3>Hibrit Geçiş</h3>
+            <p>Tekerlekler ve bacaklar arasında <span class="highlight" style="color:#f97316;">sorunsuz geçiş</span>. Karmaşık kontrol algoritmaları ve mekanik tasarım gerektirir.[1]</p>
+        </div>
+        <div class="data-box" style="border-left-color: #6366f1;">
+            <i class="fa-solid fa-weight-hanging" style="font-size: 30px; color: #6366f1;"></i>
+            <h3>Denge ve Stabilite</h3>
+            <p>Jiroskoplar, ivmeölçerler ve <span class="highlight" style="color:#6366f1;">gelişmiş kontrol sistemleri</span> ile iki bacak üzerinde dinamik denge sağlanır.[1]</p>
+        </div>
+        <div class="data-box" style="border-left-color: var(--accent-main);">
+            <i class="fa-solid fa-mountain-sun" style="font-size: 30px; color: var(--accent-main);"></i>
+            <h3>Çok Yönlülük</h3>
+            <p>Hastane koridorlarından <span class="highlight">merdivenlere ve dış mekana</span> kadar farklı ortam koşullarına adaptasyon.[1]</p>
+        </div>
+        <div style="grid-column: span 3; margin-top: 20px;">
+            <p style="font-style: italic; color: var(--text-secondary);">Tasarım; mekanik sistem, sensör sistemi, güç sistemi, kontrol sistemi ve gelişmiş yapay zeka modüllerinin bir sentezidir.[1]</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Bu robotların mühendislik başarısı üç sütun üzerine kuruludur:<br>
+            1. <strong>Hibrit Geçiş:</strong> Robotun ne zaman süreceğine, ne zaman yürüyeceğine karar veren zeka.<br>
+            2. <strong>Dinamik Denge:</strong> İki tekerlek üzerinde durmak, sürekli bir "düşmeyi engelleme" halidir (Ters sarkaç modeli).<br>
+            3. <strong>Adaptasyon:</strong> Hastane koridorunda sessizce süzülen robotun, gerektiğinde merdiven çıkarak kat değiştirebilmesi.<br>
+            LIDAR ve IMU sensörleri burada robotun gözü ve kulağıdır.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-timeline"></i> Teknolojik Gelişim Evreleri</h2>
+    <div class="content-area three-column" style="grid-template-columns: 1fr 1fr 1fr; align-items: flex-start;">
+        <div class="data-box">
+            <h3>2000'ler: Erken Dönem</h3>
+            <ul class="list-icon">
+                <li>İlk hibrit konseptler ve basit denge kontrolü.[1]</li>
+                <li>Sınırlı hareket yetenekleri.[1]</li>
+            </ul>
+        </div>
+        <div class="data-box">
+            <h3>2010'lar: Orta Dönem</h3>
+            <ul class="list-icon">
+                <li>Gelişmiş sensör ve işlemci gücü.[1]</li>
+                <li>Çok modlu hareket stratejileri.[1]</li>
+                <li>Enerji verimliliğinde iyileşmeler.[1]</li>
+            </ul>
+        </div>
+        <div class="data-box" style="border-left-color: var(--accent-main);">
+            <h3>2020'ler: Güncel Teknoloji</h3>
+            <ul class="list-icon">
+                <li><span class="highlight">Yapay Zeka (YZ)</span> ve Makine Öğrenimi entegrasyonu.[1]</li>
+                <li>Adaptif kontrol sistemleri.[1]</li>
+                <li>Minyatürleşme ve hafifletme.[1]</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Teknolojinin evrimine baktığımızda;<br>
+            2000'lerde robotların sadece ayakta durabilmesi bile başarıydı.<br>
+            2010'larda Boston Dynamics ile birlikte robotların koştuğunu ve zıpladığını gördük.<br>
+            Bugün, 2020'lerde ise "Zeka" devrede. Artık robotlar sadece hareket etmiyor; çevreyi anlıyor, öğreniyor ve kararlar alıyor. Minyatürleşme sayesinde laboratuvarlardan çıkıp hastane koridorlarına girdiler.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-heart-pulse"></i> 3. İnsan Sağlığındaki Ana Uygulama Alanları</h2>
+    <div class="content-area three-column" style="grid-template-columns: repeat(2, 1fr) 0.5fr;">
+        <div style="grid-column: span 2;">
+            <ul class="list-icon">
+                <li><span class="highlight">Fiziksel Rehabilitasyon:</span> Yürüme paternlerini analiz etme ve kişiselleştirilmiş egzersiz desteği.[1]</li>
+                <li><span class="highlight">Yaşlı Bakımı ve Destek:</span> Düşme önleme, sosyal etkileşim ve vital belirti takibi.[1]</li>
+                <li><span class="highlight">Hastane Lojistiği:</span> İlaç, malzeme ve numune taşıma ile personel iş yükünü azaltma.[1]</li>
+                <li><span class="highlight">Ameliyathane Asistanlığı:</span> Enstrüman ve görüntüleme yönetimi.[1]</li>
+                <li><span class="highlight">Acil Müdahale:</span> Tehlikeli ortamlarda ilk yardım ve triaj desteği.[1]</li>
+            </ul>
+        </div>
+        <div class="data-box" style="height: 100%;">
+            <h3 style="margin-top: 0; color: var(--accent-main);">Demografik Baskı</h3>
+            <p>2050 yılında 60 yaş üstü nüfusun <span class="highlight">2 milyarı aşması</span> bekleniyor.[1] Robotlar bu dramatik değişimin çözüm anahtarıdır.</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Bu teknolojiyi 5 ana başlıkta inceledik.<br>
+            En kritik olanı **Yaşlı Bakımı**. 2050'de 2 milyar yaşlı insandan bahsediyoruz. Mevcut sağlık sistemi insan gücüyle bunu kaldıramaz.<br>
+            Ayrıca Rehabilitasyon, Lojistik, Ameliyathane ve Afet yönetimi diğer kilit alanlar. Şimdi bunları detaylandıralım.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-crutch"></i> 3.1. Fiziksel Rehabilitasyon: Klinik Etki</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3>Kişiselleştirilmiş Yürüme ve Motivasyon</h3>
+            <p>TBR'ler, inme ve omurilik yaralanması sonrası hastaların iyileşme sürecinde kritik rol oynar. Robotun sağladığı destek seviyesi hastanın <span class="highlight">ilerleme durumuna göre otomatik olarak ayarlanır</span>.[1]</p>
+            <p>Sensör verileri, hastanın denge problemlerinin kökenini tespit etmeye yardımcı olur. <span class="highlight">Oyunlaştırma teknikleri</span> ile tedavi uyumu artırılır.[1]</p>
+        </div>
+        <div class="data-box">
+            <h3 style="color: var(--accent-main);">Vaka Çalışması: Güney Kore HUBO [1]</h3>
+            <div class="stat-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="stat-item">
+                    <h1>%60</h1>
+                    <p>Yürüme Fonksiyonunda İyileşme</p>
+                </div>
+                <div class="stat-item">
+                    <h1>%45</h1>
+                    <p>Kas Gücünde Artış</p>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-size: 16px; color: var(--text-secondary); text-align: center;">(6 aylık spinal kord yaralanması rehabilitasyon programı sonuçları)</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Rehabilitasyonda en önemli şey "tekrar"dır. Robotlar yorulmaz.<br>
+            Güney Kore'deki HUBO robotları ile yapılan çalışmada, spinal kord hastalarında 6 ayda <strong>%60 iyileşme</strong> görüldü.<br>
+            Robot, hastayı sadece fiziksel olarak taşımıyor; aynı zamanda oyunlaştırma ile motive ediyor ve hastanın yapamadığı hareketleri analiz edip raporluyor.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-hands-holding-circle"></i> 3.2. Yaşlı Bakımı ve Düşme Önleme</h2>
+    <div class="content-area two-column">
+        <div class="data-box">
+            <h3 style="color: var(--accent-main);">Vaka Çalışması: Japonya T-HR3 Pilot Uygulaması [1]</h3>
+            <ul class="list-icon">
+                <li><span class="highlight">%78:</span> Yaşlıların mobilite desteğini faydalı bulma oranı.</li>
+                <li><span class="highlight">%35:</span> Bakım personelinin iş yükünde azalma.</li>
+                <li><span class="highlight">%40:</span> Düşme olaylarında azalma.</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Güvenlik ve Sosyal Etkileşim</h3>
+            <p>Robotlar, sensörleri ile düşme riskini anlık tespit edebilir ve <span class="highlight">fiziksel destek sağlayabilir</span> veya acil yardım çağırabilir.[1]</p>
+            <p>Sosyal izolasyonu azaltmak için <span class="highlight">sohbet ve video görüşme</span> imkanları sunar. Entegre sensörler ile vital belirtiler (kalp ritmi, kan basıncı) sürekli izlenebilir.[1]</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Yaşlılarda en büyük korku "düşme"dir. Japonya'daki T-HR3 denemelerinde düşme olaylarında <strong>%40 azalma</strong> sağlandı.<br>
+            Robot, yaşlı bireyi takip ediyor, dengesinin bozulduğunu milisaniyeler içinde anlıyor ve destek oluyor.<br>
+            Ayrıca personelin iş yükünü %35 azalttı; bu da personelin hastalara daha kaliteli vakit ayırmasını sağladı.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-truck-medical"></i> 3.3. Hastane Lojistiği ve Verimlilik</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3>Personel Yükünü Azaltma</h3>
+            <p>TBR'ler, ilaç, malzeme ve numune taşıma gibi rutin görevleri üstlenir. Hibrit hareket yetenekleri sayesinde, <span class="highlight">asansör kullanabilir ve merdiven çıkabilir</span>, böylece çok katlı hastanelerde etkin çalışır.[1]</p>
+            <p>Otonom navigasyon sistemleri, dinamik ve kalabalık ortamlarda güvenli hareket ve öncelikli rota tanıma sağlar.[1]</p>
+        </div>
+        <div class="data-box">
+            <h3 style="color: var(--accent-main);">Vaka Çalışması: ABD Hastane Lojistiği [1]</h3>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <h1>%99.8</h1>
+                    <p>Teslimat Başarı Oranı</p>
+                </div>
+                <div class="stat-item">
+                    <h1>500+</h1>
+                    <p>Günlük Transfer</p>
+                </div>
+                <div class="stat-item">
+                    <h1>%30</h1>
+                    <p>Maliyet Azalması</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Hastanelerde "ayak işleri" çok zaman alır. İlaç taşı, numune götür...<br>
+            ABD'deki denemelerde robotlar günde 500'den fazla transfer yaptı ve hata oranı neredeyse sıfır (%99.8 başarı).<br>
+            Bu robotlar asansörü kullanabiliyor, merdiven çıkabiliyor. Bu sayede lojistik maliyetlerinde %30 tasarruf sağlandı.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-scalpel-path"></i> 3.4 & 3.5. Ameliyathane ve Acil Müdahale</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3>Ameliyathane Asistanlığı</h3>
+            <ul class="list-icon">
+                <li><strong>Enstrüman Yönetimi:</strong> Cerraha taleplerine anında yanıt vererek steriliteyi korur.[1]</li>
+                <li><strong>Görüntüleme Desteği:</strong> <span class="highlight">Artırılmış Gerçeklik (AR)</span> ile 3D anatomi modellerini cerrahın görüş alanına getirir.[1]</li>
+                <li><strong>Malzeme Takibi:</strong> Ameliyat sonrası vücutta yabancı cisim kalma riskini ortadan kaldırır.[1]</li>
+            </ul>
+        </div>
+        <div>
+            <h3>Afet ve Acil Müdahale</h3>
+            <ul class="list-icon">
+                <li><strong>Tehlikeli Ortamlar:</strong> Kimyasal/biyolojik tehlike bulunan ortamlarda personel riski minimize edilir.[1]</li>
+                <li><strong>Triaj Desteği:</strong> Hastaları hızla değerlendirir ve defibrilatör gibi acil malzemeleri ulaştırır.[1]</li>
+                <li><strong>İletişim Köprüsü:</strong> Uzaktaki doktorlar ile yaralılar arasında video konferans ile bağlantı kurar.[1]</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Ameliyathanede robotlar "Steril Hemşire" rolündedir. Enstrümanları sayar, cerraha uzatır. Bu, insan hatasını (vücutta sargı bezi unutulması gibi) engeller.<br>
+            Afet durumunda ise; enkaz altında veya kimyasal sızıntı olan yerde insan çalışamaz. Bu robotlar tekerlekleriyle enkaz üstünde değilse bile bacaklarıyla yürüyerek oraya girer ve ilk müdahaleyi yapar.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-box-open"></i> 4.1. Örnek: Boston Dynamics Handle (Lojistik Gücü)</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3 style="color: var(--accent-main);">Teknik Özellikler</h3>
+            <ul class="list-icon">
+                <li><span class="highlight">2 metre</span> yükseklik, 105 kg ağırlık.[1]</li>
+                <li>Maksimum <span class="highlight">15 km/saat</span> hız.[1]</li>
+                <li>45 kg yük taşıma kapasitesi.[1]</li>
+                <li>1.2 metre yüksekliğe zıplayabilme.[1]</li>
+            </ul>
+            <p style="margin-top: 20px;"><strong>Sağlık Uygulamaları:</strong> Ağır medikal ekipman ve büyük hacimli lojistik operasyonlar için potansiyel kullanım.[1]</p>
+        </div>
+        <img src="http://googleusercontent.com/image_collection/image_retrieval/10218264705529273850" alt="Boston Dynamics Handle" style="max-height: 400px; width: 100%; object-fit: contain; border-radius: 8px;">
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Bu gördüğünüz Boston Dynamics'in "Handle" robotu.<br>
+            15 km hızla gidiyor, yani koşan bir insandan hızlı. 45 kg yük kaldırıyor ve 1.2 metre zıplıyor.<br>
+            Hastane deposunda oksijen tüplerini taşırken veya ağır cihazları naklederken bu güç çok önemlidir.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-robot"></i> 4.2 & 4.3. Örnek: T-HR3 ve HUBO</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3 style="color: #6366f1;">Toyota T-HR3 (Telepresence)</h3>
+            <p><strong>Odak Noktası:</strong> Uzaktan varlık (Telepresence) konsepti ile geliştirilmiştir.[1]</p>
+            <p><strong>Uygulama:</strong> Uzak bölgelerdeki hastalara teletıp hizmeti, <span class="highlight" style="color:#6366f1;">yaşlı bakımında fiziksel destek</span> ve rehabilitasyon egzersizlerinde model olma.[1]</p>
+        </div>
+        <div>
+            <h3 style="color: #f97316;">KAIST HUBO (Dönüştürülebilir)</h3>
+            <p><strong>Özellik:</strong> Diz üzerindeki tekerlekler ile hızlı hareket edebilen, hem yürüyebilen hem de tekerlekli hareket yapabilen humanoid.[1]</p>
+            <p><strong>Uygulama:</strong> Kompakt yapısı sayesinde hastane ortamlarında kullanım ve <span class="highlight" style="color:#f97316;">acil müdahale senaryolarında</span> çevik hareket.[1]</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Toyota T-HR3, doktorun "Avatarı" gibidir. Doktor uzaktan kumanda eder, robot hastaya dokunur. Özellikle bulaşıcı hastalıklarda (Pandemi gibi) doktoru korumak için mükemmeldir.<br>
+            KAIST HUBO ise tam bir "Transformer"dır. Dizlerinde tekerlek vardır. Düz yolda diz çöker sürer, engebeli yolda ayağa kalkar yürür.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-bolt-lightning"></i> 5. Teknolojik Zorluklar</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3 style="color: var(--accent-main);">Denge, Enerji ve Maliyet</h3>
+            <ul class="list-icon">
+                <li><strong>Denge ve Stabilite:</strong> Tekerlek ve bacak geçişlerinde ağırlık merkezini koruma. Kontrol algoritmaları sürekli optimize edilmeli.[1]</li>
+                <li><strong>Enerji Yönetimi:</strong> Ağır yük taşıma veya merdiven çıkma gibi <span class="highlight">enerji yoğun aktiviteler</span> batarya ömrünü kısaltır.[1]</li>
+                <li><strong>İnsan-Robot Etkileşimi:</strong> Güvenli ve doğal etkileşim için doğal dil işleme ve duygusal zeka algoritmaları gereklidir.[1]</li>
+            </ul>
+        </div>
+        <div class="data-box" style="padding: 40px; text-align: center;">
+            <i class="fa-solid fa-money-bill-transfer" style="font-size: 60px; color: #f97316; margin-bottom: 20px;"></i>
+            <h1 style="font-size: 50px; color: #f97316;">$100k - $500k</h1>
+            <p style="font-size: 24px; color: var(--text-primary); margin-top: 10px;">Yüksek İlk Yatırım Maliyeti</p>
+            <p style="font-size: 16px;">Seri üretim ve modüler tasarımla maliyetlerin düşürülmesi kritik bir zorluktur.[1]</p>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Her şey mükemmel değil tabii. En büyük sorun <strong>Maliyet</strong>. Bir robot 500 bin dolara kadar çıkabiliyor.<br>
+            Diğer sorun Enerji; merdiven çıkmak çok pil tüketiyor.<br>
+            Ve Denge; yük taşırken ağırlık merkezi değiştiğinde robotun düşmemesi için çok gelişmiş algoritmalara ihtiyaç var.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-scale-balanced"></i> 6. Düzenleyici ve Etik İkilemler</h2>
+    <div class="content-area two-column">
+        <ul class="list-icon">
+            <li><strong>Güvenlik Standartları:</strong> Hasta güvenliği için <span class="highlight">ISO 13482</span> (Kişisel Bakım) ve <span class="highlight">IEC 60601</span> (Tıbbi Elektrikli Ekipman) gibi sıkı standartlara uyum zorunludur.[1]</li>
+            <li><strong>Veri Gizliliği:</strong> Robotların topladığı hassas hasta verileri (<span class="highlight">HIPAA/GDPR</span>) şifreleme ve güvenli erişim kontrolü gerektirir.[1]</li>
+            <li><strong>Hukuki Sorumluluk:</strong> Robot kaynaklı bir hata durumunda sorumluluğun kime ait olduğunun (üretici, yazılım, operatör) netleştirilmesi gerekir.[1]</li>
+            <li><strong>Sosyal Etkiler:</strong> İnsan temasının azalması, iş değiştirme ve teknoloji bağımlılığı gibi sosyal endişeler toplum ile diyalog gerektirir.[1]</li>
+        </ul>
+        <img src="http://googleusercontent.com/image_collection/image_retrieval/17801611308432883353" alt="Ethical AI diagram" style="max-height: 400px; width: 100%; object-fit: contain; border-radius: 8px;">
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Robot hastayı düşürürse suçlu kim? Üretici mi? Hastane mi? Yazılımcı mı? Bu hukuki boşluk büyük bir sorun.<br>
+            Ayrıca robotlar evimize girdiğinde mahremiyet ne olacak? Kameralar her şeyi kaydediyor.<br>
+            Ve tabii ki, "Robotlar işimizi elimizden mi alacak?" sorusu. Cevap hayır, işimizi elimizden almayacak, işimizi yapmamıza yardım edecek.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-rocket"></i> 7. Gelecek Perspektifleri (2025-2035)</h2>
+    <div class="content-area three-column">
+        <div class="data-box">
+            <h3 style="color: #6366f1;">Yapay Zeka Entegrasyonu</h3>
+            <p>Derin öğrenme ile donatılmış, insan davranışlarını <span class="highlight">tahmin edebilen</span> ve karmaşık kararlar alabilen sistemler.[1]</p>
+        </div>
+        <div class="data-box">
+            <h3 style="color: #f97316;">Yumuşak Robotik (Soft Robotics)</h3>
+            <p>Esnek, yumuşak malzemelerle daha <span class="highlight" style="color:#f97316;">güvenli fiziksel etkileşim</span>. Rehabilitasyon için devrim niteliğinde.[1]</p>
+        </div>
+        <div class="data-box">
+            <h3 style="color: var(--accent-main);">5G ve Bulut Robotik</h3>
+            <p>Bulut tabanlı işlem gücü, yerel donanım sınırlarını aşar ve <span class="highlight">uzaktan operasyonları</span> güvenilir hale getirir.[1]</p>
+        </div>
+        <div style="grid-column: span 3; text-align: center; margin-top: 20px;">
+            <h3 style="color: var(--text-secondary); font-size: 28px;">Diğer Trendler: Swarm Robotics ve Kişiselleştirme/Adaptasyon</h3>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Gelecek 10 yılda neler göreceğiz?<br>
+            1. **Soft Robotics:** Metal yerine yumuşak silikon robotlar. İnsana çarpınca acıtmayan robotlar.<br>
+            2. **5G:** Robotun beyni bulutta olacak. Gecikme olmadan anlık veri işleyecek.<br>
+            3. **Sürü Zekası:** Tek robot yerine, karıncalar gibi işbirliği yapan yüzlerce küçük robot.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 -->
+<div class="slide-container">
+    <h2 class="slide-title"><i class="fa-solid fa-map-location-dot"></i> 8. Türkiye'deki Durum ve Öneriler</h2>
+    <div class="content-area two-column">
+        <div>
+            <h3>Mevcut Durum ve Fırsatlar</h3>
+            <p>Türkiye'de robotik araştırmalar (ODTÜ, İTÜ, Boğaziçi) mevcuttur. Ancak TBR özelinde <span class="highlight">sınırlı sayıda proje</span> bulunmaktadır.[1]</p>
+            <p><strong>Fırsat:</strong> Genç mühendis nüfusu ve savunma sanayisinde kazanılan <span class="highlight">otonom sistem deneyimi</span>, bu alanda hızlı bir atılım için güçlü bir temel sunar.[1]</p>
+        </div>
+        <div class="data-box" style="padding: 30px;">
+            <h3 style="color: var(--accent-main);">Stratejik Öneriler [1]</h3>
+            <ul class="list-icon">
+                <li>Ulusal Robotik Stratejisi hazırlanmalı.</li>
+                <li>TÜBİTAK destekli <span class="highlight">AR-GE yatırımları</span> teşvik edilmeli.</li>
+                <li>Seçili hastanelerde <span class="highlight">pilot uygulamalar</span> başlatılmalı.</li>
+                <li>Kritik bileşenlerin <span class="highlight">yerli üretimi</span> hedeflenmeli.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Konuşma Notları:</strong><br><br>
+            Ülkemizde ODTÜ, İTÜ gibi merkezlerde güzel çalışmalar var ama yeterli değil.<br>
+            Savunma sanayisindeki (İHA/SİHA) başarımızı sağlık robotiğine aktarmalıyız. Genç nüfusumuz ve mühendislerimiz buna hazır.<br>
+            Önerim: Şehir hastanelerinde pilot bölgeler seçilmeli ve yerli robotlar buralarda test edilmeli.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 -->
+<div class="slide-container" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at center, rgba(52, 211, 153, 0.15), transparent 70%), var(--bg-panel);">
+    <h2 style="font-size: 65px; color: var(--text-primary); margin-bottom: 30px;">9. SONUÇ VE DEĞERLENDİRME</h2>
+    <p style="font-size: 24px; max-width: 900px; color: var(--accent-main);">Tekerli biped robotlar sadece teknolojik bir yenilik değil, aynı zamanda <span class="highlight">insan yaşam kalitesini artırma ve toplumsal zorlukları çözme</span> fırsatıdır.[1]</p>
+    <div style="margin-top: 50px;">
+        <p style="font-size: 30px; color: var(--text-primary);">Öngörü: Bu robotların <span class="highlight">2035 yılı itibarıyla</span> hastanelerde ve bakım evlerinde <span class="highlight">rutin olarak</span> kullanılması beklenmektedir.[1]</p>
+    </div>
+    <div style="margin-top: 80px;">
+        <h3 style="color: var(--text-secondary); font-size: 24px;">TEŞEKKÜRLER | SORULARINIZ</h3>
+    </div>
+
+    <!-- Speaker Notes -->
+    <div class="speaker-notes">
+        <i class="fa-solid fa-file-lines note-icon"></i>
+        <div class="note-content">
+            <strong>Kapanış Konuşması:</strong><br><br>
+            Sonuç olarak; tekerli biped robotlar bir bilim kurgu öğesi değil, demografik krizimizin çözümüdür.<br>
+            2035'te hastaneye girdiğinizde sizi bir robotun karşılaması rutin olacak.<br>
+            Bu teknolojiyi sadece tüketen değil, üreten bir ülke olmalıyız.<br>
+            Dinlediğiniz için teşekkür ederim. Sorularınızı alabilirim.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
