@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tekerli Biped Robotların İnsan Sağlığındaki Uygulamaları</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0b1020;
+      color: #f5f5f5;
+      line-height: 1.6;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(5, 8, 20, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 1.5rem;
+      z-index: 1000;
+    }
+    header .logo {
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+    }
+    header nav a {
+      color: #ddd;
+      margin-left: 1rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    header nav a:hover {
+      color: #4fd1c5;
+    }
+    main {
+      padding-top: 70px;
+    }
+    section {
+      padding: 3rem 8vw;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    section h1, section h2 {
+      margin-top: 0;
+    }
+    .hero {
+      min-height: calc(100vh - 70px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .hero-title {
+      font-size: clamp(2.1rem, 3vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .hero-sub {
+      font-size: 1.05rem;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+    .pill-row {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .pill {
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 0.25rem 0.8rem;
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 2fr);
+      gap: 2rem;
+    }
+    .card {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 1rem 1.2rem;
+      background: radial-gradient(circle at top left, rgba(79, 209, 197, 0.18), transparent 60%);
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.1rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+    ul {
+      padding-left: 1.1rem;
+    }
+    @media (max-width: 800px) {
+      .grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      header nav {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Doktora Semineri</div>
+    <nav>
+      <a href="#hero">Ana Sayfa</a>
+      <a href="#problem">Motivasyon</a>
+      <a href="#tekerli-biped">Tekerli Biped</a>
+      <a href="#uygulamalar">Uygulamalar</a>
+      <a href="#ornekler">Örnekler</a>
+      <a href="#gelecek">Gelecek</a>
+      <a href="#turkiye">Türkiye</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <div class="hero-title">
+        Tekerli Biped Robotların İnsan Sağlığındaki Uygulamaları
+      </div>
+      <div class="hero-sub">
+        Hibrit hareket kabiliyetine sahip tekerli biped robotların,
+        rehabilitasyondan yaşlı bakımına, hastane lojistiğinden acil
+        müdahaleye kadar sağlık hizmetlerini nasıl dönüştürebileceğine
+        dair kapsamlı bir inceleme.
+      </div>
+      <div class="pill-row">
+        <div class="pill">Rehabilitasyon</div>
+        <div class="pill">Yaşlı Bakımı</div>
+        <div class="pill">Hastane Lojistiği</div>
+        <div class="pill">Ameliyathane Asistanlığı</div>
+        <div class="pill">Acil Müdahale</div>
+      </div>
+    </section>
+
+    <!-- PROBLEM & MOTIVATION -->
+    <section id="problem">
+      <h2>1. Problem ve Motivasyon</h2>
+      <div class="grid-2">
+        <div>
+          <h3>Sağlıkta Büyüyen Baskı</h3>
+          <ul>
+            <li>Yaşlanan nüfus ve artan kronik hastalıklar</li>
+            <li>Sağlık personeli açığı ve artan iş yükü</li>
+            <li>Rehabilitasyona olan talebin hızla yükselmesi</li>
+            <li>Hizmet kalitesi, erişilebilirlik ve maliyet baskısı</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="tag">Neden Robotik?</span>
+          <p>
+            Bu tablo, insan gücünü tamamlayan; tekrarlı, riskli ve zaman
+            alıcı işleri devralabilen, hareket kabiliyeti yüksek akıllı
+            robotik sistemleri zorunlu kılıyor.
+          </p>
+          <p>
+            Tekerli biped robotlar, tekerlekli platformların verimliliği ile
+            iki ayaklı sistemlerin çevikliğini birleştirerek sağlık
+            alanında yeni bir altyapı sunuyor.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEKERLI BIPED NEDIR -->
+    <section id="tekerli-biped">
+      <h2>2. Tekerli Biped Robotların Temel Özellikleri</h2>
+      <p>
+        Tekerli biped robotlar, geleneksel humanoid robotların yürüme
+        kabiliyetini, tekerlekli platformların hız ve enerji verimliliğiyle
+        birleştiren hibrit sistemlerdir.
+      </p>
+      <div class="grid-2">
+        <div>
+          <h3>Tasarım Prensipleri</h3>
+          <ul>
+            <li>Hibrit hareket: yürüme ↔ tekerlekli hareket</li>
+            <li>İleri seviye denge ve stabilite kontrolü</li>
+            <li>Uzun görevler için enerji verimliliği</li>
+            <li>İç ve dış ortam koşullarına adaptasyon</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Temel Bileşenler</h3>
+          <ul>
+            <li>Mekanik sistem (bacaklar, tekerlekler, aktüatörler)</li>
+            <li>Sensörler (LIDAR, kamera, IMU, tork sensörleri)</li>
+            <li>Güç sistemi (Li-ion bataryalar, güç yönetimi)</li>
+            <li>Kontrol ve yazılım (yapay zeka, hareket planlama)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- UYGULAMALAR -->
+    <section id="uygulamalar">
+      <h2>3. İnsan Sağlığındaki Uygulama Alanları</h2>
+
+      <h3>3.1. Fiziksel Rehabilitasyon</h3>
+      <ul>
+        <li>Yürüme paternlerinin ölçümü ve kişiselleştirilmiş egzersizler</li>
+        <li>Uyarlanabilir destek seviyesi ile güvenli yürüme</li>
+        <li>Denge ve koordinasyon egzersizlerinde aktif rol</li>
+        <li>Oyunlaştırma ile motivasyon ve tedaviye uyum artışı</li>
+      </ul>
+
+      <h3>3.2. Yaşlı Bakımı ve Destek</h3>
+      <ul>
+        <li>İlaç hatırlatma, yemek ve eşya taşıma gibi günlük destekler</li>
+        <li>Düşme riskinin izlenmesi ve acil durum çağrısı</li>
+        <li>Sosyal etkileşim ve aile ile iletişim köprüsü</li>
+        <li>Vital belirtilerin sürekli takibi ve anormallik uyarıları</li>
+      </ul>
+
+      <h3>3.3. Hastane Lojistiği</h3>
+      <ul>
+        <li>İlaç, malzeme ve numune taşıma</li>
+        <li>Çamaşır ve tıbbi atık yönetiminde riskin azaltılması</li>
+        <li>Asansör ve merdiven kullanım kabiliyeti</li>
+        <li>Kalabalık ortamlarda güvenli otonom navigasyon</li>
+      </ul>
+
+      <h3>3.4. Ameliyathane Asistanlığı</h3>
+      <ul>
+        <li>Doğru enstrümanın doğru anda hazır edilmesi</li>
+        <li>Sessiz, temas gerektirmeyen sesli komut kontrolü</li>
+        <li>Görüntüleme desteği ve AR tabanlı anatomi gösterimi</li>
+        <li>Malzeme sayımı ve kayıt ile hata riskinin azaltılması</li>
+      </ul>
+
+      <h3>3.5. Acil Müdahale ve Afet Yönetimi</h3>
+      <ul>
+        <li>Hızlı triaj ve vital ölçümler</li>
+        <li>Defibrilatör ve acil müdahale çantası taşıma</li>
+        <li>Tehlikeli ortamlarda insan yerine ilk temas</li>
+        <li>Uzak doktorlar için sensör verisi + video ile köprü</li>
+      </ul>
+    </section>
+
+    <!-- ORNEKLER -->
+    <section id="ornekler">
+      <h2>4. Mevcut Teknolojiler ve Örnekler</h2>
+      <div class="grid-2">
+        <div class="card">
+          <span class="tag">Boston Dynamics</span>
+          <h3>Handle</h3>
+          <p>
+            Yüksek hız ve taşıma kapasitesine sahip tekerli biped platform.
+            Hastane lojistiği ve ağır medikal ekipman taşıma için önemli bir
+            referans tasarım.
+          </p>
+        </div>
+        <div class="card">
+          <span class="tag">Toyota</span>
+          <h3>T-HR3</h3>
+          <p>
+            Telepresence odaklı humanoid robot. Teletıp, temasın riskli olduğu
+            pandemi senaryoları ve yaşlı bakımında uzaktan destek için örnek.
+          </p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1.5rem;">
+        <span class="tag">KAIST</span>
+        <h3>HUBO</h3>
+        <p>
+          Yürüme ve tekerlekli hızlı hareketi birleştiren humanoid robot.
+          Kompakt yapısı ve çevik hareketiyle hastane ve bakım ortamları için
+          güçlü bir araştırma platformu.
+        </p>
+      </div>
+    </section>
+
+    <!-- GELECEK -->
+    <section id="gelecek">
+      <h2>5. Gelecek Perspektifleri (2035 Vizyonu)</h2>
+      <ul>
+        <li>Derin öğrenme ve bilişsel yapay zeka entegrasyonu</li>
+        <li>Yumuşak robotik ile güvenli fiziksel etkileşim</li>
+        <li>5G & bulut robotik ile sürekli güncellenen akıllı davranışlar</li>
+        <li>Sürü robotik ile koordineli hastane operasyonları</li>
+        <li>Kullanıcının alışkanlık ve tercihine göre uyarlanmış bakım</li>
+      </ul>
+      <p>
+        2035 itibarıyla tekerli biped robotların, hastaneler, bakım evleri ve
+        rehabilitasyon merkezlerinde rutin bir altyapı unsuru haline gelmesi
+        beklenmektedir.
+      </p>
+    </section>
+
+    <!-- TURKIYE -->
+    <section id="turkiye">
+      <h2>6. Türkiye'deki Durum ve Öneriler</h2>
+      <h3>Mevcut Durum</h3>
+      <ul>
+        <li>Üniversitelerde güçlü robotik laboratuvarları (ODTÜ, İTÜ, vb.)</li>
+        <li>Ancak tekerli biped robotlar özelinde sınırlı sayıda proje</li>
+      </ul>
+      <h3>Fırsatlar</h3>
+      <ul>
+        <li>Genç ve dinamik mühendis nüfusu</li>
+        <li>Savunma sanayisinden gelen güçlü AR-GE birikimi</li>
+        <li>COVID-19 sonrası sağlık teknolojilerine artan ilgi</li>
+      </ul>
+      <h3>Öneriler</h3>
+      <ul>
+        <li>Ulusal robotik stratejisinin oluşturulması</li>
+        <li>TÜBİTAK ve bakanlık destekli AR-GE projelerinin artırılması</li>
+        <li>Seçili hastanelerde pilot uygulamaların başlatılması</li>
+        <li>Robotik ve sağlık profesyonelleri için eğitim programları</li>
+        <li>Kritik bileşenlerde yerli üretim ve teknoloji transferi</li>
+      </ul>
+    </section>
+
+    <!-- KAPANIS -->
+    <section id="kapanis">
+      <h2>7. Sonuç ve Tartışma</h2>
+      <p>
+        Tekerli biped robotlar, yalnızca ileri bir mühendislik ürünü değil;
+        aynı zamanda insan yaşam kalitesini artırma ve sağlık hizmetlerini
+        dönüştürme potansiyeline sahip yeni bir altyapı teknolojisidir.
+      </p>
+      <p>
+        Bu teknolojinin sorumlu, etik ve erişilebilir biçimde
+        geliştirilmesi, önümüzdeki on yılda hem sağlık sektörü hem de
+        teknoloji ekosistemi için kritik bir fırsattır.
+      </p>
+      <p><strong>Sorular & Tartışma</strong></p>
+    </section>
+  </main>
+</body>
+</html>
